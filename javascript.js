@@ -1,26 +1,43 @@
-function game(){
-   let compPoints =0;
-   let playerPoints=0;
+const results = document.querySelector('#results');
+const comp = document.querySelector('#comp');
+const player = document.querySelector('#player');
 
-    while((compPoints != 5) && (playerPoints != 5) ){
-        let point = playRound(getPlayerChoice(), getCompChoice());
 
-        console.log('Player: ' +playerPoints);
-        console.log('Comp: ' + compPoints);
-        console.log('result: '+ point);
+function game (){
+    const btns = document.querySelectorAll('button');
+    
+    let compPoints =0;
+    let playerPoints =0;
 
-        if(point.substring(4,7) =='Win'){
-            playerPoints++;
-        }
-        else if(point.substring(4,8) == 'Lose'){
-            compPoints++;
-        }
-        else{
-            continue;
-        }
-   }
+    btns.forEach( (button) => {
+
+        button.addEventListener('click', () => {
+
+            if( (compPoints <5) && (playerPoints <5) ){
+
+                let choice = button.innerHTML;
+                let point = playRound(choice, getCompChoice());
+                results.innerText = point;
+
+                if(point.substring(4,7) =='Win'){
+                    playerPoints++;
+                }
+                else if(point.substring(4,8) == 'Lose'){
+                    compPoints++;
+                }
+
+                comp.innerText = 'Comp: ' + compPoints;
+                player.innerText = 'Player: ' + playerPoints;
+
+                if((compPoints == 5) || (playerPoints == 5) ){
+                    return (playerPoints > compPoints) ? results.innerText = "You Win!" : results.innerText= "You Lose...";
+                }
+            }
+        })
+        
+    })
+    
 }
-
 
 function playRound(playerSelection, computerSelection){
    
@@ -87,12 +104,6 @@ function getCompChoice (){
             return 'Scissors';
         break;
     }
-}
-
-
-function getPlayerChoice (){
-    let choice= prompt('Please choose Rock, Paper, or Scissors.');
-    return choice;
 }
 
 game();
